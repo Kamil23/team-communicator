@@ -15,21 +15,27 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
 import { db } from '../firebase';
 import { useCollection } from 'react-firebase-hooks/firestore';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../firebase';
 
 
 function Sidebar() {
 
     const [channels, loading, error] = useCollection(db.collection('rooms'));
-    console.log(channels.docs)
+    const [user] = useAuthState(auth);
+
+    const substringName = (text) => {
+        return text.substring(0, text.indexOf(" "))
+    }
 
     return (
         <SidebarContainer>
             <SidebarHeader>
                 <SidebarInfo>
-                    <h2>Kamil</h2>
+                    <h2>{substringName(user?.displayName)}</h2>
                     <h3>
                         <FiberManualRecordIcon />
-                        Kamil Cieplicki
+                        {user?.displayName}
                     </h3>
                 </SidebarInfo>
                 <CreateIcon />
